@@ -2,11 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import "./styles.css"
 import { parseLinkHeader } from "./parseLinkHeader"
 
-const LIMIT = 50
+const LIMIT = 100
 
 export default function App() {
-  const [photos, setPhotos] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+
+  const [photos, setPhotos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const nextPhotoUrlRef = useRef()
 
   async function fetchPhotos(url, { overwrite = false } = {}) {
@@ -31,7 +32,7 @@ export default function App() {
   }
 
   const imageRef = useCallback(image => {
-    if (image == null || nextPhotoUrlRef.current == null) return
+    if (image === null || nextPhotoUrlRef.current === null) return
 
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
@@ -44,12 +45,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    fetchPhotos(
-      `http://localhost:3000/photos-short-list?_page=1&_limit=${LIMIT}`,
-      {
-        overwrite: true,
-      }
-    )
+    fetchPhotos(`http://localhost:3000/photos-short-list?_page=1&_limit=${LIMIT}`, { overwrite: true })
   }, [])
 
   return (
@@ -61,14 +57,9 @@ export default function App() {
           ref={index === photos.length - 1 ? imageRef : undefined}
         />
       ))}
-      {isLoading &&
-        Array.from({ length: LIMIT }, (_, index) => index).map(n => {
-          return (
-            <div key={n} className="skeleton">
-              Loading...
-            </div>
-          )
-        })}
+      {isLoading && (
+        Array.from({ length: LIMIT }, (_, index) => <div className="skeleton" key={index} >Loading...</div>)
+      )}
     </div>
   )
 }
