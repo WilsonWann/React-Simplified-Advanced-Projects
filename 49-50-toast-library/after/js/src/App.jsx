@@ -1,25 +1,23 @@
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import "./styles.css"
 import { useToast } from "./useToast"
 
 export default function App() {
   const { addToast, removeToast } = useToast()
+
   const inputRef = useRef(null)
-  const [id, setId] = useState()
+  const toastIdRef = useRef(null)
 
   function createToast() {
-    if (inputRef.current == null || inputRef.current.value === "") return
+    if (inputRef.current == null || inputRef.current.value == "") return
 
-    setId(addToast(inputRef.current.value, { position: "top-left" }))
+    toastIdRef.current = addToast(inputRef.current.value)
   }
-
   return (
-    <div className="form">
+    <div className={"form"}>
       <input type="text" ref={inputRef} />
-      <button onClick={createToast}>Add Toast</button>
-      <button onClick={() => id != null && removeToast(id)}>
-        Remove Last Toast
-      </button>
+      <button onClick={createToast} >Add Toast</button>
+      <button onClick={() => toastIdRef.current != null && removeToast(toastIdRef.current)}>Remove Last Toast</button>
     </div>
   )
 }

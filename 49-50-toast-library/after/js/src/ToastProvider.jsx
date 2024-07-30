@@ -1,5 +1,5 @@
-import { createContext, useState } from "react"
-import { createPortal } from "react-dom"
+import { createContext, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 export const ToastContext = createContext(null)
 
@@ -10,7 +10,8 @@ const DEFAULT_OPTIONS = {
 }
 
 export function ToastProvider({ children }) {
-  const [toasts, setToasts] = useState([])
+
+  const [toasts, setToasts] = useState([]);
 
   function addToast(
     text,
@@ -22,7 +23,7 @@ export function ToastProvider({ children }) {
     })
 
     if (options.autoDismiss) {
-      setTimeout(() => removeToast(id), options.autoDismissTimeout)
+      setTimeout(() => removeToast(id), options.autoDismissTimeout);
     }
 
     return id
@@ -45,30 +46,19 @@ export function ToastProvider({ children }) {
   }, {})
 
   return (
-    <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
-      {children}
-      {createPortal(
-        Object.entries(toastsByPosition).map(([position, toasts]) => (
-          <div key={position} className={`toast-container ${position}`}>
-            {toasts.map(toast => (
-              <Toast
-                remove={() => removeToast(toast.id)}
-                text={toast.text}
-                key={toast.id}
-              />
-            ))}
-          </div>
-        )),
-        document.getElementById("toast-container")
-      )}
+    <ToastContext.Provider value={{ toasts, addToast, removeToast }}>{children}
+      {createPortal(Object.entries(toastsByPosition).map(([position, toasts]) => (
+        <div key={position} className={`toast-container ${position}`}>
+          {toasts.map(toast => (
+            <Toast remove={() => removeToast(toast.id)} text={toast.text} key={toast.id} />
+          ))}
+        </div>
+      )), document.getElementById("toast-container"))}
     </ToastContext.Provider>
   )
 }
 
+
 function Toast({ text, remove }) {
-  return (
-    <div onClick={remove} className="toast">
-      {text}
-    </div>
-  )
+  return <div onClick={remove} className="toast">{text}</div>
 }
